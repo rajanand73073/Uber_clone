@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 const UserLogout = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -15,7 +14,7 @@ const UserLogout = () => {
         },
       })
       .then((response) => {
-        console.log("response",response)
+        console.log("response", response);
         if (response.status === 200 || response.status === 201) {
           localStorage.removeItem("token");
           console.log(localStorage);

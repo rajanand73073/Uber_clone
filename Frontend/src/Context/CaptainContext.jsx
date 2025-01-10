@@ -15,7 +15,7 @@ const CaptainContext = ({ children }) => {
 
   return (
     <>
-      <CaptainDataContext.Provider value={ value }>
+      <CaptainDataContext.Provider value={value}>
         {children}
       </CaptainDataContext.Provider>
     </>

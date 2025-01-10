@@ -6,8 +6,7 @@ import Context, { UserDataContext } from "../Context/UserContext.jsx";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-  const UserSignUp = () => {
+const UserSignUp = () => {
   const navigate = useNavigate();
   const [firstname, setfirstname] = useState("");
   const [lastname, setlastname] = useState("");
@@ -33,7 +32,7 @@ import { useNavigate } from "react-router-dom";
 
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/captains/register`,
-        newUser
+        newUser,
       );
 
       // Check if response status is 200 or 201 to confirm success
@@ -49,8 +48,8 @@ import { useNavigate } from "react-router-dom";
         console.log("User Object:", data.data.user);
 
         setuser(data.data.user);
-         const token = data.data.token
-        localStorage.setItem('token', token);
+        const token = data.data.token;
+        localStorage.setItem("token", token);
 
         setemail("");
         setfirstname("");

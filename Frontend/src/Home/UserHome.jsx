@@ -7,6 +7,8 @@ import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
+import axios from "axios";
+
 const UserHome = () => {
   const [pickup, setpickup] = useState("");
   const [destination, setdestination] = useState("");
@@ -22,9 +24,18 @@ const UserHome = () => {
   const [VehicleFound, setVehicleFound] = useState(false);
   const waitingForDriverRef = useRef(null);
   const [waitingForDriver, setwaitingForDriver] = useState(false);
+  const [fare, setfare] = useState("");
 
   const sethandler = (e) => {
     e.preventDefault();
+    if (pickup.trim() === "" || destination.trim() === "") {
+      alert("please choose pickup or destination");
+    } else {
+      console.log(pickup);
+
+      setvehiclePanelOpen(true);
+      setpanelOpen(false);
+    }
   };
 
   useGSAP(
@@ -47,7 +58,7 @@ const UserHome = () => {
           });
       }
     },
-    [panelOpen]
+    [panelOpen],
   );
 
   useGSAP(
@@ -62,7 +73,7 @@ const UserHome = () => {
         });
       }
     },
-    [vehiclePanelOpen]
+    [vehiclePanelOpen],
   );
 
   useGSAP(
@@ -77,7 +88,7 @@ const UserHome = () => {
         });
       }
     },
-    [ConfirmedPanelOpen]
+    [ConfirmedPanelOpen],
   );
 
   useGSAP(
@@ -92,7 +103,7 @@ const UserHome = () => {
         });
       }
     },
-    [VehicleFound]
+    [VehicleFound],
   );
 
   useGSAP(
@@ -107,8 +118,32 @@ const UserHome = () => {
         });
       }
     },
-    [waitingForDriver]
+    [waitingForDriver],
   );
+
+  async function findTrip(e) {
+    e.preventDefault();
+    setvehiclePanelOpen(true);
+    setpanelOpen(false);
+
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/ride/getfare`,
+        {
+          params: { pickup, destination },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      console.log("response", response.data);
+
+      setfare(response.data.data);
+    } catch (error) {
+      console.error("error", error.message);
+    }
+  }
 
   return (
     <>
@@ -156,13 +191,16 @@ const UserHome = () => {
                 value={destination}
                 onClick={() => setpanelOpen(true)}
               />
+              <button
+                className="bg-black w-full rounded-lg text-white p-2 my-2"
+                onClick={findTrip}
+              >
+                Find Trip
+              </button>
             </form>
           </div>
           <div className="h-0 bg-white" ref={panelRef}>
-            <LocationsearchPanel
-              setvehiclePanelOpen={setvehiclePanelOpen}
-              setpanelOpen={setpanelOpen}
-            />
+            <LocationsearchPanel setpanelOpen={setpanelOpen} />
           </div>
         </div>
 
@@ -173,6 +211,7 @@ const UserHome = () => {
           <VehiclePanel
             setvehiclePanelOpen={setvehiclePanelOpen}
             setConfirmedPanelOpen={setConfirmedPanelOpen}
+            fare={fare}
           />
         </div>
 
@@ -185,12 +224,13 @@ const UserHome = () => {
             pickup={pickup}
             destination={destination}
             setVehicleFound={setVehicleFound}
+            fare={fare}
           />
         </div>
 
         <div
           ref={vehicleFoundRef}
-          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-14"
         >
           <LookingForDriver
             pickup={pickup}
@@ -201,7 +241,7 @@ const UserHome = () => {
 
         <div
           ref={waitingForDriverRef}
-          className="fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-12"
+          className="fixed w-full  z-10 bottom-0  bg-white px-3 py-6 pt-14"
         >
           <WaitingForDriver
             setVehicleFound={setVehicleFound}

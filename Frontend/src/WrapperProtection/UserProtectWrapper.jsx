@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserDataContext } from "../Context/UserContext";
@@ -7,12 +7,12 @@ const UserProtectWrapper = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setloading] = useState(true);
   const token = localStorage.getItem("token");
-  const {setuser}= useContext(UserDataContext)
+  const { setuser } = useContext(UserDataContext);
   //  if (!token) {
   //   navigate('/login')
   //  }
   //React Rules: Always use useEffect or similar hooks for side effects(like:navigate,setstate) to comply with React's lifecycle.
- 
+
   useEffect(() => {
     if (!token) {
       navigate("/UserLogin");
@@ -34,7 +34,7 @@ const UserProtectWrapper = ({ children }) => {
         }
       })
       .catch((error) => {
-        console.error("error",error.message)
+        console.error("error", error.message);
         localStorage.removeItem("token");
         navigate("/UserLogin");
       });
@@ -44,12 +44,7 @@ const UserProtectWrapper = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return(
-  <>
-  {children}
-  </>
-  );
-  
+  return <>{children}</>;
 };
 
 export default UserProtectWrapper;

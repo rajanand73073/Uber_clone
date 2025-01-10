@@ -10,9 +10,7 @@ const CaptainDetails = () => {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s"
             alt=""
           />
-          <h4 className="text-lg font-medium capitalize">
-       AnandRaj
-          </h4>
+          <h4 className="text-lg font-medium capitalize">AnandRaj</h4>
         </div>
         <div>
           <h4 className="text-xl font-semibold">₹295.20</h4>

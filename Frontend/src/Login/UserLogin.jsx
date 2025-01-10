@@ -23,7 +23,7 @@ const UserLogin = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/users/login`,
-        user
+        user,
       );
       if (response.status === 200 || response.status === 201) {
         const data = response.data;

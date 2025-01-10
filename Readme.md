@@ -30,17 +30,17 @@ The backend is developed using Node.js, Express, and MongoDB. It is responsible 
 ### Routes
 
 - **Captain Routes**:
-    - `POST /api/captains/captain-register`: Endpoint to register a new captain.
-    - `POST /api/captains/captain-login`: Endpoint to log in an existing captain.
-    - `GET /api/captains/captain-details`: Endpoint to retrieve the profile of the logged-in captain.
-    - `GET /api/captains/captain-logout`: Endpoint to log out the logged-in captain.
+  - `POST /api/captains/captain-register`: Endpoint to register a new captain.
+  - `POST /api/captains/captain-login`: Endpoint to log in an existing captain.
+  - `GET /api/captains/captain-details`: Endpoint to retrieve the profile of the logged-in captain.
+  - `GET /api/captains/captain-logout`: Endpoint to log out the logged-in captain.
 - **User Routes**:
-    - `POST /api/users/register`: Endpoint to register a new user.
-    - `POST /api/users/login`: Endpoint to log in an existing user.
-    - `GET /api/users/user-profile`: Endpoint to retrieve the profile of the logged-in user.
-    - `GET /api/users/logout`: Endpoint to log out the logged-in user.
+  - `POST /api/users/register`: Endpoint to register a new user.
+  - `POST /api/users/login`: Endpoint to log in an existing user.
+  - `GET /api/users/user-profile`: Endpoint to retrieve the profile of the logged-in user.
+  - `GET /api/users/logout`: Endpoint to log out the logged-in user.
 - **Map Routes**:
-    - `GET /api/map/get-coordinates`: Endpoint to retrieve coordinates for a given address.
+  - `GET /api/map/get-coordinates`: Endpoint to retrieve coordinates for a given address.
 
 ### Middleware
 

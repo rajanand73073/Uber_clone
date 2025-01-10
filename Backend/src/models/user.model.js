@@ -36,7 +36,7 @@ const userSchema = new Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.pre("save", async function (next) {
@@ -47,7 +47,7 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
-  next()
+  next();
 };
 
 userSchema.methods.generateAuthToken = function () {
@@ -58,7 +58,7 @@ userSchema.methods.generateAuthToken = function () {
     process.env.JWT_SECRETS,
     {
       expiresIn: process.env.JWT_TOKEN_EXPIRY,
-    }
+    },
   );
 
   return token;

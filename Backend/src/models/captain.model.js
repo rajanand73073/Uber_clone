@@ -29,7 +29,6 @@ const captainSchema = new mongoose.Schema({
     required: true,
     trim: true,
     minlength: [8, "Password must be atleast * characters long"],
-   
   },
   vehicle: {
     plate: {
@@ -66,7 +65,7 @@ const captainSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default:"inactive",
+    default: "inactive",
     enum: ["active", "inactive"],
   },
 });
@@ -79,22 +78,22 @@ captainSchema.pre("save", async function (next) {
 
 captainSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
-  next()
+  next();
 };
 
 captainSchema.methods.generateAuthToken = async function () {
-    const token = jwt.sign(
-      {
-        _id: this._id,
-      },
+  const token = jwt.sign(
+    {
+      _id: this._id,
+    },
 
-      process.env.JWT_SECRETS,
+    process.env.JWT_SECRETS,
 
-      {
-        expiresIn: process.env.JWT_TOKEN_EXPIRY,
-      }
-    );
-    return token;
-  };
+    {
+      expiresIn: process.env.JWT_TOKEN_EXPIRY,
+    },
+  );
+  return token;
+};
 
 export const Captain = mongoose.model("Captain", captainSchema);

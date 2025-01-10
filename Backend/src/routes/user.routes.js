@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { body } from "express-validator";
 const router = Router();
-import { registerUser, loginUser 
-,getUserProfile,loggoutUser
+import {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  loggoutUser,
 } from "../controllers/user.controller.js";
-import {  verifyJwtUser } from "../middleware/authmiddleware.js";
-
+import { verifyJwtUser } from "../middleware/authmiddleware.js";
 
 router
   .route("/register")
@@ -22,7 +24,7 @@ router
           .withMessage("Password must be at least 8 characters long"),
       ],
     ],
-    registerUser
+    registerUser,
   );
 
 router
@@ -37,13 +39,11 @@ router
           .withMessage("Password must be at least 8 characters long"),
       ],
     ],
-    loginUser
+    loginUser,
   );
 
-router.route("/user-profile").get(verifyJwtUser,getUserProfile)
+router.route("/user-profile").get(verifyJwtUser, getUserProfile);
 
-router.route("/logout").get(verifyJwtUser,loggoutUser)
-
-
+router.route("/logout").get(verifyJwtUser, loggoutUser);
 
 export default router;

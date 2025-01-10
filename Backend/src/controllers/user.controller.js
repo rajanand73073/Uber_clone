@@ -47,7 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("token", token, options)
     .json(
-      new ApiResponse(200, { user, token }, "User registered successfully")
+      new ApiResponse(200, { user, token }, "User registered successfully"),
     );
 });
 
@@ -87,8 +87,8 @@ const loginUser = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         { InUser: loggedInUser, token },
-        "Logged In Successfully"
-      )
+        "Logged In Successfully",
+      ),
     );
 });
 
@@ -112,7 +112,7 @@ const loggoutUser = asyncHandler(async (req, res) => {
     },
     {
       new: true,
-    }
+    },
   );
 
   const options = {
