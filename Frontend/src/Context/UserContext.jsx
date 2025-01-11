@@ -11,6 +11,7 @@ const Context = ({ children }) => {
       lastname: "",
     },
   });
+
   return (
     <>
       <UserDataContext.Provider value={{ user, setuser }}>

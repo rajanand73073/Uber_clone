@@ -3,12 +3,28 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Ride } from "../models/ride.model.js";
 import { ride, getFare } from "../services/ride.service.js";
+import { Captain } from "../models/captain.model.js";
+import { sendMessageToSocketId } from "../socket.server.js";
+import { activeCaptain } from "../socket.server.js";
 
 const CreateRide = asyncHandler(async (req, res) => {
   try {
     const { pickup, destination, vehicleType } = req.body;
     const user = req.user?._id;
     const rideBooking = await ride({ pickup, destination, user, vehicleType });
+
+    const rideWithUser = await Ride.findOne(rideBooking._id).populate("user");
+
+    console.log("ride", rideWithUser);
+
+    console.log("activeCaptain ", activeCaptain);
+
+    console.log("activeCaptain socketid", activeCaptain.socketId);
+
+    sendMessageToSocketId(activeCaptain.socketId, {
+      event: "new-ride",
+      data: rideWithUser,
+    });
 
     return res
       .status(200)

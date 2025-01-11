@@ -9,7 +9,7 @@ const CaptainProtectionWrapper = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setloading] = useState(true);
   const token = localStorage.getItem("token");
-  // const {setCaptainData}= useContext(CaptainDataContext)
+  const { setCaptainData } = useContext(CaptainDataContext);
   //  if (!token) {
   //   navigate('/login')
   //  }
@@ -30,7 +30,7 @@ const CaptainProtectionWrapper = ({ children }) => {
         if (response.status === 200 || response.status === 201) {
           console.log("response", response.data);
           const data = response.data;
-          // setCaptainData(data.data.Profile);
+          setCaptainData(data.data.Profile);
           console.log(data.data.Profile);
           setloading(false);
         }

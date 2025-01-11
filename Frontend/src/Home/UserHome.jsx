@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -8,6 +8,8 @@ import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
 import axios from "axios";
+import { CreateSocketContext } from "../Context/SocketContext";
+import { UserDataContext } from "../Context/UserContext";
 
 const UserHome = () => {
   const [pickup, setpickup] = useState("");
@@ -25,17 +27,12 @@ const UserHome = () => {
   const waitingForDriverRef = useRef(null);
   const [waitingForDriver, setwaitingForDriver] = useState(false);
   const [fare, setfare] = useState("");
+  const { user } = useContext(UserDataContext);
+  const { socket } = useContext(CreateSocketContext);
+  const [vehicleType, setvehicleType] = useState("");
 
   const sethandler = (e) => {
     e.preventDefault();
-    if (pickup.trim() === "" || destination.trim() === "") {
-      alert("please choose pickup or destination");
-    } else {
-      console.log(pickup);
-
-      setvehiclePanelOpen(true);
-      setpanelOpen(false);
-    }
   };
 
   useGSAP(
@@ -123,8 +120,14 @@ const UserHome = () => {
 
   async function findTrip(e) {
     e.preventDefault();
-    setvehiclePanelOpen(true);
-    setpanelOpen(false);
+    if (pickup.trim() === "" || destination.trim() === "") {
+      alert("please choose pickup or destination");
+    } else {
+      console.log(pickup);
+
+      setvehiclePanelOpen(true);
+      setpanelOpen(false);
+    }
 
     try {
       const response = await axios.get(
@@ -145,6 +148,34 @@ const UserHome = () => {
     }
   }
 
+  async function createRide() {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/api/ride/rideBooking`,
+        {
+          pickup,
+          destination,
+          vehicleType,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    console.log(response);
+  }
+
+  useEffect(() => {
+    console.log("user", user);
+
+    socket.emit("join", { userType: "User", userId: user._id });
+  }, [user]);
+
   return (
     <>
       <div>
@@ -163,7 +194,7 @@ const UserHome = () => {
         </div>
 
         <div className="absolute h-screen top-0 w-full flex flex-col justify-end overflow-hidden">
-          <div className="h-[30%]  bg-white p-6 relative">
+          <div className="h-[35%]  bg-white p-5 relative">
             <h5
               ref={panelCloseRef}
               onClick={() => {
@@ -173,7 +204,7 @@ const UserHome = () => {
             >
               <i className="ri-arrow-down-wide-line"></i>
             </h5>
-            <h4 className="text-2xl font-semibold">Find a trip</h4>
+            <h4 className="text-2xl font-semibold text-center">Find a trip</h4>
             <form onSubmit={sethandler} className="relative ">
               <input
                 onClick={() => setpanelOpen(true)}
@@ -192,7 +223,7 @@ const UserHome = () => {
                 onClick={() => setpanelOpen(true)}
               />
               <button
-                className="bg-black w-full rounded-lg text-white p-2 my-2"
+                className="bg-black w-full rounded-lg text-white p-2 mt-4"
                 onClick={findTrip}
               >
                 Find Trip
@@ -212,11 +243,12 @@ const UserHome = () => {
             setvehiclePanelOpen={setvehiclePanelOpen}
             setConfirmedPanelOpen={setConfirmedPanelOpen}
             fare={fare}
+            setvehicleType={setvehicleType}
           />
         </div>
 
         <div
-          className="fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-14 "
+          className="fixed w-full z-10 bottom-0 bg-white px-3 py-8 pt-14 "
           ref={confirmedPanelRef}
         >
           <ConfirmRide
@@ -225,6 +257,7 @@ const UserHome = () => {
             destination={destination}
             setVehicleFound={setVehicleFound}
             fare={fare}
+            createRide={createRide}
           />
         </div>
 

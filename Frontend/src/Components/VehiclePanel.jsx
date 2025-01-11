@@ -18,6 +18,7 @@ const VehiclePanel = (props) => {
         className=" Car flex border-2  active:border-black active:bg-gray-200  rounded-xl w-full p-3 items-center mt-2 transition-all"
         onClick={() => {
           props.setConfirmedPanelOpen(true);
+          props.setvehicleType("Car");
         }}
       >
         <img
@@ -35,13 +36,14 @@ const VehiclePanel = (props) => {
           <h5 className="font-medium text-sm">2 mins away</h5>
           <p className="font-normal text-xs text-gray-600">Affordable </p>
         </div>
-        <h2 className="text-xl font-semibold"> Rupees :{props.fare.car} </h2>
+        <h2 className="text-xl font-semibold">₹{props.fare.car} </h2>
       </div>
 
       <div
         className="flex border-2 active:border-black rounded-xl w-full p-3 items-center mt-2  active:bg-gray-200 "
         onClick={() => {
           props.setConfirmedPanelOpen(true);
+          props.setvehicleType("moto");
         }}
       >
         <img
@@ -59,13 +61,14 @@ const VehiclePanel = (props) => {
           <h5 className="font-medium text-sm">2 mins away</h5>
           <p className="font-normal text-xs text-gray-600">Affordable </p>
         </div>
-        <h2 className="text-xl font-semibold"> Rupees :{props.fare.moto} </h2>
+        <h2 className="text-xl font-semibold"> ₹{props.fare.moto} </h2>
       </div>
 
       <div
         className="flex border-2 active:border-black rounded-xl w-full p-3 items-center mt-2  active:bg-gray-200 "
         onClick={() => {
           props.setConfirmedPanelOpen(true);
+          props.setvehicleType("auto");
         }}
       >
         <img
@@ -83,7 +86,7 @@ const VehiclePanel = (props) => {
           <h5 className="font-medium text-sm">2 mins away</h5>
           <p className="font-normal text-xs text-gray-600">Affordable </p>
         </div>
-        <h2 className="text-xl font-semibold"> Rupees :{props.fare.auto} </h2>
+        <h2 className="text-xl font-semibold"> ₹{props.fare.auto} </h2>
       </div>
     </>
   );

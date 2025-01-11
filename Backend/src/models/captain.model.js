@@ -2,73 +2,79 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt, { compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const captainSchema = new mongoose.Schema({
-  fullname: {
-    firstname: {
+const captainSchema = new mongoose.Schema(
+  {
+    fullname: {
+      firstname: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: [3, "firstname must be atleast 3 characters long"],
+      },
+      lastname: {
+        type: String,
+        // required: true,
+        trim: true,
+        minlength: [3],
+      },
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: [5, "Email must be at least 5 characters long"],
+    },
+    password: {
       type: String,
       required: true,
       trim: true,
-      minlength: [3, "firstname must be atleast 3 characters long"],
+      minlength: [8, "Password must be atleast * characters long"],
     },
-    lastname: {
-      type: String,
-      // required: true,
-      trim: true,
-      minlength: [3],
+    vehicle: {
+      plate: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: [3, "Plate must be at least 3 characters long"],
+      },
+      color: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: [3, "Plate must be at least 3 characters long"],
+      },
+      capacity: {
+        type: Number,
+        required: true,
+        minlength: [1, "capacity must be atleast 1"],
+      },
+      vehicleType: {
+        type: String,
+        required: true,
+        enum: ["car", "motorcycle", "auto"],
+      },
     },
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: [5, "Email must be at least 5 characters long"],
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: [8, "Password must be atleast * characters long"],
-  },
-  vehicle: {
-    plate: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: [3, "Plate must be at least 3 characters long"],
-    },
-    color: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: [3, "Plate must be at least 3 characters long"],
-    },
-    capacity: {
-      type: Number,
-      required: true,
-      minlength: [1, "capacity must be atleast 1"],
-    },
-    vehicleType: {
-      type: String,
-      required: true,
-      enum: ["car", "motorcycle", "auto"],
-    },
-  },
 
-  location: {
-    lat: {
-      type: Number,
+    location: {
+      lat: {
+        type: Number,
+      },
+      lon: {
+        type: Number,
+      },
     },
-    lon: {
-      type: Number,
+    status: {
+      type: String,
+      default: "inactive",
+      enum: ["active", "inactive"],
+    },
+    socketId: {
+      type: String,
     },
   },
-  status: {
-    type: String,
-    default: "inactive",
-    enum: ["active", "inactive"],
-  },
-});
+  { timestamps: true },
+);
 
 captainSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

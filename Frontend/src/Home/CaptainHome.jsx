@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import CaptainDetails from "../Components/CaptainDetails";
@@ -6,12 +6,17 @@ import RidePopUp from "../Components/RidePopup";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ConfirmRidePopUp from "../Components/ConfirmRidePopUP";
+import { CaptainDataContext } from "../Context/CaptainContext";
+import { CreateSocketContext } from "../Context/SocketContext";
 
 const CaptainHome = () => {
-  const [RidePopupPanel, setRidePopupPanel] = useState(true);
+  const [RidePopupPanel, setRidePopupPanel] = useState(false);
   const ridePopupPanelRef = useRef(null);
   const ConfirmRidePanelRef = useRef(null);
   const [ConfirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false);
+  const { CaptainData } = useContext(CaptainDataContext);
+  const { socket } = useContext(CreateSocketContext);
+  const [Ride, setRide] = useState("");
 
   useGSAP(
     function () {
@@ -42,6 +47,19 @@ const CaptainHome = () => {
     },
     [RidePopupPanel],
   );
+
+  useEffect(() => {
+    console.log("captain", CaptainData);
+
+    socket.emit("join", { userType: "Captain", userId: CaptainData._id });
+  }, [CaptainData]);
+
+  socket.on("new-ride", (data) => {
+    setRide(data);
+    setRidePopupPanel(true);
+  });
+
+  console.log("Ride", Ride);
 
   return (
     <>
@@ -77,7 +95,7 @@ const CaptainHome = () => {
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
           <RidePopUp
-            // ride={ride}
+            Ride={Ride}
             setRidePopupPanel={setRidePopupPanel}
             setConfirmRidePopupPanel={setConfirmRidePopupPanel}
             // confirmRide={confirmRide}
